@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-exchange_rates}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  airflow:
+    image: apache/airflow:latest
+    depends_on:
+      - postgres
+    environment:
+      EXECUTION_HOUR: "${EXECUTION_HOUR:-00:00}"
+      API_KEY: "${API_KEY}"
+      POSTGRES_DB: ${POSTGRES_DB:-exchange_rates}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_HOST: ${POSTGRES_HOST:-localhost}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+
+  etl:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - airflow
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-exchange_rates}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_HOST: ${POSTGRES_HOST:-localhost}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      API_KEY: "${API_KEY}"
+
+volumes:
+  postgres_data:
