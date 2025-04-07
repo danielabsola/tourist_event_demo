@@ -4,49 +4,69 @@ Este repositorio contiene una colección de demos orientadas al análisis y mode
 
 ---
 
+## 1. `currency_api_demo/`
 
-### 1. `currency_api_demo/`
+Contiene una clase `currencyAPI.py` que abstrae el consumo de una API de tipo currency (cambio de divisas). Este componente es utilizado por el flujo Airflow del directorio `currency_job/`.
 
-Este directorio contiene una demostración de una API diseñada para consultar y almacenar tasas de cambio de divisas.
+---
 
-- **`currency_job/dags/currency_daily_dag.py`**: Define un DAG para la extracción diaria de tasas de cambio, posiblemente para su uso con Apache Airflow.&#8203;:contentReference[oaicite:2]{index=2}
-- **`src/`**:
-  - **`db/__init__.py`**: :contentReference[oaicite:3]{index=3}&#8203;:contentReference[oaicite:4]{index=4}
-  - **`currencyAPI.py`**: :contentReference[oaicite:5]{index=5}&#8203;:contentReference[oaicite:6]{index=6}
-  - **`main.py`**: :contentReference[oaicite:7]{index=7}&#8203;:contentReference[oaicite:8]{index=8}
+## 2. `currency_job/`
 
-### 2. `hierarchy_people_demo/`
+Implementación de un flujo de datos con **Apache Airflow** para consultar diariamente la API de divisas:
 
-:contentReference[oaicite:9]{index=9}&#8203;:contentReference[oaicite:10]{index=10}
+- **dags/currency_daily_dag.py**: define el DAG que ejecuta la consulta diaria en Airflow.
+- **src/**:
+  - `db/`: conexión a base de datos, modelos y operaciones
+  - `currencyAPI.py`: importado desde `currency_api_demo`, usado para llamar a la API.
+  - `main.py`: script que coordina la ejecución general.
 
-- **`insert_data_demo.sql`**: :contentReference[oaicite:11]{index=11}&#8203;:contentReference[oaicite:12]{index=12}
-- **`recursive_demo.sql`**: :contentReference[oaicite:13]{index=13}&#8203;:contentReference[oaicite:14]{index=14}
-- **`snowflake_final_person_hierarchy.sql`**: :contentReference[oaicite:15]{index=15}&#8203;:contentReference[oaicite:16]{index=16}
-- **`snowflake_person_hierarchy.png`**: :contentReference[oaicite:17]{index=17}&#8203;:contentReference[oaicite:18]{index=18}
+---
 
-### 3. `queries_demo/`
+## 3. `tests/`
 
-:contentReference[oaicite:19]{index=19}&#8203;:contentReference[oaicite:20]{index=20}
+Contiene pruebas automatizadas con `pytest`:
 
-- **`category_prices.sql`**: :contentReference[oaicite:21]{index=21}&#8203;:contentReference[oaicite:22]{index=22}
-- **`diagram.jpg`**: :contentReference[oaicite:23]{index=23}&#8203;:contentReference[oaicite:24]{index=24}
-- **`ranked_days.sql`**: :contentReference[oaicite:25]{index=25}&#8203;:contentReference[oaicite:26]{index=26}
-- **`ranked_reviews.sql`**: :contentReference[oaicite:27]{index=27}&#8203;:contentReference[oaicite:28]{index=28}
-- **`venue_events.sql`**: :contentReference[oaicite:29]{index=29}&#8203;:contentReference[oaicite:30]{index=30}
+- `test_main.py`: prueba funcional de `main.py`.
+- `conftest.py`: configuración de fixtures.
+- Compatible con entornos Docker para testeo aislado.
 
-## 🚀 Cómo Empezar
+---
 
-Para explorar y ejecutar las demostraciones proporcionadas:
+## 4. `Docker & Dependencias`
 
-1. **Clonar el repositorio**:
-   ```bash
-   git clone https://github.com/danielabsola/tourist_event_demo.git
+- `Dockerfile`: define la imagen para correr el proyecto.
+- `docker-compose.yml`: orquesta la ejecución (servicios base como PostgreSQL u otros pueden definirse aquí).
+- `requirements.txt`: lista de dependencias de Python necesarias para correr el proyecto.
+
+---
+
+## 5. `hierarchy_people_demo/`
+
+Simulación de una jerarquía de personas en una empresa u organización. Incluye:
+
+- `insert_data_demo.sql`: script para insertar datos jerárquicos de prueba.
+- `recursive_demo.sql`: ejemplo de consulta recursiva con SQL estándar.
+- `snowflake_final_person_hierarchy.sql`: consulta final adaptada para Snowflake.
+- `snowflake_person_hierarchy.png`: imagen ilustrativa de la jerarquía esperada.
+
+---
+
+## 6. `queries_demo/`
+
+Consultas SQL analíticas aplicables a un sistema de eventos turísticos:
+
+- `category_prices.sql`: precios por categoría de evento.
+- `ranked_days.sql`: ranking de días con más actividad.
+- `ranked_reviews.sql`: ranking basado en reseñas.
+- `venue_events.sql`: relación entre locaciones y eventos.
+- `sold_plans.sql`: análisis de cantidad de planes vendidos, con posibilidad de agrupación por fecha o categoría.
+- `diagram.jpg`: diagrama de relaciones (tablas/conceptos implicados).
 
 
 ---
 
 
 📎 Notas
-Este proyecto es una demo técnica, ideal como base para proyectos más complejos.
-
+Este proyecto es una demo técnica, ideal como base para proyectos más complejos. Fue desarrollado con fines educativos y demostrativos.
+El DAG de Airflow asume una infraestructura mínima montada con Docker.
 Algunas consultas están optimizadas para bases de datos como Snowflake, aunque pueden adaptarse fácilmente a PostgreSQL u otros engines SQL.
